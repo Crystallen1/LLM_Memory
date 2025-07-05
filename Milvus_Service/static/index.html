@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Web服务框架</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .endpoint {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .method {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .url {
+            font-family: monospace;
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Go Web服务框架</h1>
+        <p>这是一个简单的Go Web服务框架演示页面。您可以测试以下API端点：</p>
+        
+        <div class="endpoint">
+            <span class="method">GET</span> <span class="url">/health</span> - 健康检查
+            <button onclick="testEndpoint('/health', 'GET')">测试</button>
+        </div>
+        
+        <div class="endpoint">
+            <span class="method">GET</span> <span class="url">/api/users</span> - 获取用户列表
+            <button onclick="testEndpoint('/api/users', 'GET')">测试</button>
+        </div>
+        
+        <div class="endpoint">
+            <span class="method">POST</span> <span class="url">/api/users</span> - 创建用户
+            <button onclick="testEndpoint('/api/users', 'POST')">测试</button>
+        </div>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function testEndpoint(url, method) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = '请求中...';
+            
+            try {
+                const options = {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                };
+                
+                const response = await fetch(url, options);
+                const data = await response.json();
+                
+                resultDiv.textContent = `响应状态: ${response.status}\n响应数据:\n${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                resultDiv.textContent = `错误: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html> 
