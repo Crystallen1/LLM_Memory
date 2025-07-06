@@ -1,0 +1,83 @@
+server:
+  port: 18081
+
+spring:
+  datasource:
+    url: jdbc:mysql://198.176.62.17:3306/LC?useSSL=false&serverTimezone=UTC
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    # redis配置
+    redis:
+      # Redis数据库索引（默认为0）
+      database: 1
+      # Redis服务器地址
+      host: 198.176.62.17
+      # Redis服务器连接端口
+      port: 6379
+      # Redis服务器连接密码（默认为空）
+      # password:
+      # 连接超时时间
+      timeout: 10s
+      lettuce:
+        pool:
+          # 连接池最大连接数
+          max-active: 200
+          # 连接池最大阻塞等待时间（使用负值表示没有限制）
+          max-wait: -1ms
+          # 连接池中的最大空闲连接
+          max-idle: 10
+          # 连接池中的最小空闲连接
+          min-idle: 0
+  main:
+    allow-bean-definition-overriding: true
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: org.crystallen.lc.entity
+  config-location: classpath:config/mybatis-config.xml
+
+
+# Sa-Token配置
+sa-token:
+  # token名称 (同时也是cookie名称)
+  token-name: satoken
+  # token有效期，单位s 默认30天, -1代表永不过期
+  timeout: 2592000
+  # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
+  active-timeout: -1
+  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
+  is-concurrent: true
+  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+  is-share: false
+  # token风格
+  token-style: uuid
+  # 是否输出操作日志
+  is-log: false
+
+# Swagger配置
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+
+# 向量服务配置（Go服务）
+vector:
+  service:
+    url: http://198.176.62.17
+
+# ChatGPT API配置
+llm:
+  api:
+    url: https://api.openai.com/v1/chat/completions
+    key: 111111
+    model: gpt-3.5-turbo
+    max-tokens: 1000
+  # 长prompt处理配置
+  prompt:
+    max-tokens: 3000  # 最大prompt token数
+    strategy: sliding-window  # 处理策略: sliding-window, importance-ranking, summary-compression, recent-first
+    max-user-input-length: 2000  # 用户输入最大长度（字符数）

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>登录和注册</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .form-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .error {
+            color: red;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>登录</h2>
+        <div class="form-group">
+            <label for="loginUsername">用户名</label>
+            <input type="text" id="loginUsername" required>
+        </div>
+        <div class="form-group">
+            <label for="loginPassword">密码</label>
+            <input type="password" id="loginPassword" required>
+        </div>
+        <button onclick="login()">登录</button>
+        <div id="loginMessage" class="error"></div>
+    </div>
+
+    <div class="form-container">
+        <h2>注册</h2>
+        <div class="form-group">
+            <label for="registerUsername">用户名</label>
+            <input type="text" id="registerUsername" required>
+        </div>
+        <div class="form-group">
+            <label for="registerPassword">密码</label>
+            <input type="password" id="registerPassword" required>
+        </div>
+        <div class="form-group">
+            <label for="registerEmail">邮箱</label>
+            <input type="email" id="registerEmail" required>
+        </div>
+        <button onclick="register()">注册</button>
+        <div id="registerMessage" class="error"></div>
+    </div>
+
+    <script>
+        async function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById('loginMessage').style.color = 'green';
+                    document.getElementById('loginMessage').textContent = '登录成功！';
+                } else {
+                    document.getElementById('loginMessage').textContent = data.message || '登录失败';
+                }
+            } catch (error) {
+                document.getElementById('loginMessage').textContent = '发生错误：' + error;
+            }
+        }
+
+        async function register() {
+            const username = document.getElementById('registerUsername').value;
+            const password = document.getElementById('registerPassword').value;
+            const email = document.getElementById('registerEmail').value;
+            
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password,
+                        email: email
+                    })
+                });
+                
+                const data = await response.text();
+                if (response.ok) {
+                    document.getElementById('registerMessage').style.color = 'green';
+                    document.getElementById('registerMessage').textContent = '注册成功！';
+                } else {
+                    document.getElementById('registerMessage').textContent = data || '注册失败';
+                }
+            } catch (error) {
+                document.getElementById('registerMessage').textContent = '发生错误：' + error;
+            }
+        }
+    </script>
+</body>
+</html> 
